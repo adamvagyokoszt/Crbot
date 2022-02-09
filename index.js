@@ -264,5 +264,5 @@ if (cmd === `${prefix}clear`) {
         }
    
     
-   
+})   
 bot.login(process.env.TOKEN)
