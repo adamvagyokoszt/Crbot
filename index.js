@@ -1,12 +1,13 @@
 const Discord = require("discord.js");
-const tokenfile = require("./tokenfile.json");
 const botconfig = require("./botconfig.json");
 const bot = new Discord.Client({disableEveryone: true});
 const fs = require("fs");
 const money = require("./money.json")
 var weather = require('weather-js');
-
-let botname = "Redstone Bot"
+const ms = require("ms");
+const superagent = require('superagent');
+const randomPuppy = require('random-puppy');
+let botname = "CR Bot"
 
 bot.on("ready", async() => {
     console.log(`${bot.user.username} sikeresn elindult!`)
@@ -119,16 +120,11 @@ bot.on("message", async message => {
         message. channel. send("Pinging..."). then(m =>{
         var ping = m. createdTimestamp - message. createdTimestamp;
         var botPing = Math. round(bot. pi);
-        m.edit(`📡 Redstone Bot pingje:\n ${ping}ms`);
+        m.edit(`📡 Clash Royal Bot pingje:\n ${ping}ms`);
         });
       }
 
      
-
-        .addField
-
-       
-
     if(cmd === `${prefix}say`){
         let szöveg = args.join(" ");
 
@@ -168,31 +164,11 @@ bot.on("message", async message => {
         }
     }
 
- 
 
-       
+                
 
-      
-   
+            
 
-                    
-
-                let clearEmbed = new Discord.MessageEmbed()
-                .setTitle(`Törölve lett ${Math.round(args[0])} Üzenet a szobából! 🧹`)
-                .setColor("GREEN")
-                .setAuthor(message.author.username)
-                .setTimestamp()
-
-                message.channel.send(clearEmbed);
-
-
-                message.channel.bulkDelete(Math.round(args[0]))
-
-
-            }
-        }
-    }
-    
     ///////////////////////BANxKICK///////////////////////
 
     if(cmd === `${prefix}ban`) {
@@ -229,7 +205,7 @@ bot.on("message", async message => {
             } else {
             let parancsEmbed = new Discord.MessageEmbed()
             .setTitle("Parancs használata:")
-            .addField(`\`${prefix}kick <@név> [indok]\``, "DreamBot")
+            .addField(`\`${prefix}kick <@név> [indok]\``, "Clash Royal Bot")
             .setColor("GREEN")
             .setDescription("HIBA: Kérlek adj meg egy indokot!!")
 
@@ -239,7 +215,7 @@ bot.on("message", async message => {
         } else {
             let parancsEmbed = new Discord.MessageEmbed()
             .setTitle("Parancs használata:")
-            .addField(`\`${prefix}kick <@név> [indok]\``, "RedstoneBot")
+            .addField(`\`${prefix}kick <@név> [indok]\``, "Clash Royal Bot")
             .setColor("GREEN")
             .setDescription("HIBA: Kérlek említs meg egy embert!")
 
