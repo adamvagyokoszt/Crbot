@@ -264,47 +264,5 @@ if (cmd === `${prefix}clear`) {
         }
     }
     
-    ///////////////////////BANxKICK///////////////////////
-
-    
-
-    if(cmd === `${prefix}kick`){
-        if (!message.member.hasPermission("KICK_MEMBERS")) return message.reply("HIBA! **Nincs jogod ehhez a parancshoz! Szükséges jog:** `Tagok kirúgása!`")
-        let kick_user = message.mentions.members.first();
-        if(args[0] && kick_user){
-
-            if(args[1]){
-
-                let KickEmbed = new Discord.MessageEmbed()
-                .setTitle("KICK")
-                .setColor("GREEN")
-                .setDescription(`**Kickelte:** ${message.author.tag}\n**Kickelve lett:** ${kick_user.user.tag}\n**Kick indoka:** ${args.slice(1).join(" ")}`)
-
-            message.channel.send(KickEmbed);
-
-                kick_user.kick(args.slice(1).join(" "));
-
-            } else {
-            let parancsEmbed = new Discord.MessageEmbed()
-            .setTitle("Parancs használata:")
-            .addField(`\`${prefix}kick <@név> [indok]\``, "CRBot")
-            .setColor("GREEN")
-            .setDescription("HIBA: Kérlek adj meg egy indokot!!")
-
-            message.channel.send(parancsEmbed);
-            }
-
-        } else {
-            let parancsEmbed = new Discord.MessageEmbed()
-            .setTitle("Parancs használata:")
-            .addField(`\`${prefix}kick <@név> [indok]\``, "CRBot")
-            .setColor("GREEN")
-            .setDescription("HIBA: Kérlek említs meg egy embert!")
-
-            message.channel.send(parancsEmbed);
-
-        }
-    }
-
-})
+   
 bot.login(process.env.TOKEN)
