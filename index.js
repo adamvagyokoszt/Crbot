@@ -7,7 +7,7 @@ var weather = require('weather-js');
 const ms = require("ms");
 const superagent = require('superagent');
 const randomPuppy = require('random-puppy');
-let botname = "Redstone Bot"
+let botname = "CR Bot"
 
 bot.on("ready", async() => {
     console.log(`${bot.user.username} sikeresn elindult!`)
@@ -203,7 +203,7 @@ if(cmd === `${prefix}macska`){
         message. channel. send("Pinging..."). then(m =>{
         var ping = m. createdTimestamp - message. createdTimestamp;
         var botPing = Math. round(bot. pi);
-        m.edit(`ÁdámBot pingje:\n ${ping}ms`);
+        m.edit(`CRBot pingje:\n ${ping}ms`);
         });
       }
 
@@ -246,6 +246,7 @@ if(cmd === `${prefix}macska`){
             message.reply("írj ötletet !")
         }
     }
+
 if (cmd === `${prefix}clear`) {
         if (message.member.permissions.has('KICK_MEMBERS')) {
             if(message.guild.member(bot.user).hasPermission("ADMINISTRATOR"))
@@ -293,7 +294,7 @@ if (cmd === `${prefix}clear`) {
             } else {
             let parancsEmbed = new Discord.MessageEmbed()
             .setTitle("Parancs használata:")
-            .addField(`\`${prefix}kick <@név> [indok]\``, "RedstoneBot")
+            .addField(`\`${prefix}kick <@név> [indok]\``, "CRBot")
             .setColor("GREEN")
             .setDescription("HIBA: Kérlek adj meg egy indokot!!")
 
@@ -303,7 +304,7 @@ if (cmd === `${prefix}clear`) {
         } else {
             let parancsEmbed = new Discord.MessageEmbed()
             .setTitle("Parancs használata:")
-            .addField(`\`${prefix}kick <@név> [indok]\``, "RedstoneBot")
+            .addField(`\`${prefix}kick <@név> [indok]\``, "CRBot")
             .setColor("GREEN")
             .setDescription("HIBA: Kérlek említs meg egy embert!")
 
