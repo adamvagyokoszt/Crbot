@@ -199,14 +199,7 @@ if(cmd === `${prefix}macska`){
     }
 
     
-    if(cmd === `${prefix}botping`) {
-        message. channel. send("Pinging..."). then(m =>{
-        var ping = m. createdTimestamp - message. createdTimestamp;
-        var botPing = Math. round(bot. pi);
-        m.edit(`CRBot pingje:\n ${ping}ms`);
-        });
-      }
-
+    
       
 
     if(cmd === `${prefix}say`){
