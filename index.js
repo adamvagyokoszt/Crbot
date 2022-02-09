@@ -107,14 +107,14 @@ bot.on("message", async message => {
         message.channel.send("labda🏀");
     }
 
-    }
+    
 
     if(cmd === `sziabot`){
         message.channel.send(`szia!`)
     }
     
    
-    }
+    
 
     if(cmd === `${prefix}botping`) {
         message. channel. send("Pinging..."). then(m =>{
