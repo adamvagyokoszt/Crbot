@@ -7,7 +7,7 @@ var weather = require('weather-js');
 const ms = require("ms");
 const superagent = require('superagent');
 const randomPuppy = require('random-puppy');
-let botname = CrBot"
+let botname = "CrBot"
 
 bot.on("ready", async() => {
     console.log(`${bot.user.username} sikeresn elindult!`)
