@@ -1,21 +1,22 @@
 const Discord = require("discord.js");
-const tokenfile = require("./tokenfile.json");
 const botconfig = require("./botconfig.json");
 const bot = new Discord.Client({disableEveryone: true});
 const fs = require("fs");
 const money = require("./money.json")
 var weather = require('weather-js');
-
-let botname = "DreamBot🎄"
+const ms = require("ms");
+const superagent = require('superagent');
+const randomPuppy = require('random-puppy');
+let botname = CrBot"
 
 bot.on("ready", async() => {
     console.log(`${bot.user.username} sikeresn elindult!`)
 
     let státuszok = [
         `${bot.guilds.cache.size}  szerver`,
-        "Prefix: -",
-        "-help",
-        "Fejlesztő: ARON_"
+        "Prefix: cr.",
+        "Clash Royal",
+        "Fejlesztő: Ádám"
     ]
 
     setInterval(function() {
@@ -24,6 +25,7 @@ bot.on("ready", async() => {
         bot.user.setActivity(status, {type: "WATCHING"})
     }, 5000)
 })
+
 
 bot.on("message", async message => {
     let MessageArray = message.content.split(" ");
@@ -42,7 +44,7 @@ bot.on("message", async message => {
     });
     let selfMoney = money[message.author.id].money;
 
-    if(cmd === `${prefix}pénzegyenleg`){
+    if(cmd === `${prefix}egyenleg`){
         let profilkep = message.author.displayAvatarURL();
 
         let MoneyEmbed = new Discord.MessageEmbed()
@@ -59,21 +61,110 @@ bot.on("message", async message => {
         message.channel.send(MoneyEmbed)
     }
 
-    if(cmd === `${prefix}ingyenpénz`){
-        message.channel.send("500FT ot kaptál!")
+    if(cmd === `${prefix}1ft`){
+        message.channel.send("1FT ot kaptál!")
         money[message.author.id] = {
-            money: selfMoney + 500
+            money: selfMoney + 1
         }
     }
 
-    if(cmd === `${prefix}pénzadd`){
-        if (!message.member.hasPermission("BAN_MEMBERS")) return message.reply("HIBA! **Nincs jogod ehhez a parancshoz! Szükséges jog:** `Pénz add!`")
-        message.channel.send("Sikeresen addoltál!")
-        money[message.author.id] = {
-            money: selfMoney + 10000
-        }
-    }
+if(cmd === `${prefix}work`){
+    let cd_role_id = "879320935566565438";
+    let cooldown_time = "10";
 
+    if(message.member.roles.cache.has(cd_role_id)) return message.reply(`Ezt a parancsot 10 percenként használhatod`)
+
+    message.member.roles.add(cd_role_id)
+
+    let üzenetek = ["Jó munkát végeztél","Feltörted a haverod gépét","Feltörted a főnököd gépét","Túl óráztál"]
+    let random_üzenet_szam = Math.floor(Math.random()*üzenetek.length)
+
+    let random_money = Math.floor(Math.random()*500 +1)
+
+    let workEmbed = new Discord.MessageEmbed()
+    .setTitle("Munka")
+
+    .addField(`${üzenetek[random_üzenet_szam]}` , ` A számládhoz került: ${random_money} FT!`)
+
+    .setColor("RANDOM")
+
+    .setTimestamp(message.createdAt)
+
+    .setFooter(botname)
+
+    message.channel.send(workEmbed)
+
+
+    money[message.author.id] = {
+        money: selfMoney + random_money,
+        user_id: message.author.id
+}
+
+setTimeout(() => {
+    message.member.roles.remove(cd_role_id)
+    }, 1000* cooldown_time)
+}
+if(cmd === `${prefix}szavazas`){
+    if(message.channel.type === 'dm') return message.reply("Itt nem tudod használni!");
+    if(args[0]){
+        let szavazasembed = new Discord.MessageEmbed()
+        .setAuthor(message.author.tag + ` | Szavazást indított!`)
+        .setDescription(args.join(" "))
+        .setColor("RANDOM")
+        .setTimestamp(message.createdAt)
+        .setFooter(bot.user.username)
+
+        message.channel.send(szavazasembed).then(async msg => {
+            await msg.react("✅")
+            await msg.react("❌")
+        })
+    } else {
+        message.reply("Kérlek add meg a szavazást!")
+    }
+} 
+
+if(cmd === `${prefix}macska`){
+     let msg = await message.channel.send("Macska betöltése🐈...")
+     
+     let {body} = await superagent
+     .get ('https://aws.random.cat/meow')
+ 
+     if(!{body}) return message.channel.send("Hiba történt⚠️! Próbáld meg újra.")
+
+
+     let catEmbed = new Discord.MessageEmbed()
+     .setColor("RANDOM")
+
+     .addField("Úgye milyen cuki😛")
+     .setImage(body.file)
+
+     .setTimestamp(message.createdAt)
+
+     .setFooter(botname)
+
+     message.channel.send(catEmbed)
+}
+    if(cmd === `${prefix}meme`){
+        if(message.channel.type === 'dm') return message.reply("Itt nem tudod használni!");
+        const subreddits = ["dankmeme", "meme", "me_irl"]
+        const random = subreddits[Math.floor(Math.random() * subreddits.length)]
+
+        const IMG = await randomPuppy(random)
+        const MemeEmbed = new Discord.MessageEmbed()
+        .setColor("RANDOM")
+        .setImage(IMG)
+        .setTitle(`Keresési szöveg: ${random} (KATT IDE!)`)
+        .setURL(`https://www.reddit.com/r/${random}`)
+
+        message.channel.send(MemeEmbed)
+    } 
+
+
+
+ if(cmd === `${prefix}help`){
+    message.channel.send("Parancsok : **Feljesztés alatt**, Készítő: Ádám#9999 , A bot hostingja: https://dashboard.heroku.com/apps , ");
+}
+    
     if(cmd === `${prefix}weather`){
         if(args[0]){
             weather.find({search: args.join(" "), degreeType: "C"}, function(err, result) {
@@ -107,56 +198,19 @@ bot.on("message", async message => {
         }
     }
 
-    if(cmd === `kosár`){
-        message.channel.send("labda🏀");
-    }
-
-    if(cmd === `invite`){
-        message.channel.send("https://discord.com/api/oauth2/authorize?client_id=920353528118124544&permissions=8&scope=bot \n Szia! Ez lenne az én invite linkem DreamBot🎄")
-    }
-
-    if(cmd === `sziabot`){
-        message.channel.send(`szia!`)
-    }
     
-    if(cmd === `supportszerver`){
-        message.channel.send("https://discord.gg/etqMepaenv")
-    }
-
     if(cmd === `${prefix}botping`) {
         message. channel. send("Pinging..."). then(m =>{
         var ping = m. createdTimestamp - message. createdTimestamp;
         var botPing = Math. round(bot. pi);
-        m.edit(`📡DreamBot pingje:\n ${ping}ms`);
+        m.edit(`Bot pingje:\n ${ping}ms`);
         });
       }
 
-      if(cmd === `${prefix}servergep`){
-        let = message.author.displayAvatarURL();
-
-        let GepEmbed = new Discord.MessageEmbed()
-        .setAuthor(message.author.username)
-
-        .setColor("GREEN")
-
-        .addField("Ram:", `AMD ryzen 5 3600x`)
-
-        .addField("Videókártya", `ASUS rog strix 2060`)
-
-        .addField("Ram", `2x8gb`)
-        
-        .addField("Alaplap", `ASUS rog strix b450f`)
-
-        .addField("BOT", `v12.5.3`)
-
-        .setFooter(`${botname} | ${message.createdAt} | ${bot.users.cache.size}.Tag`)
-
-        message.channel.send(GepEmbed)
-    }
+      
 
     if(cmd === `${prefix}say`){
         let szöveg = args.join(" ");
-
         if(szöveg) {
             let Embed = new Discord.MessageEmbed()
         .setColor("GREEN")
@@ -193,37 +247,7 @@ bot.on("message", async message => {
         }
     }
 
-    if(cmd === `${prefix}parancsok`){
-        let DreamBotEmbed = new Discord.MessageEmbed()
-
-        .setColor("GREEN")
-
-        .setTitle("**🎄DreamBot🎄**")
-
-        .addField("Parancsok:", "`kosár labda parancs🏀`\n \n `parancsok parancs📑`\n \n`ötletek parancs🧱` \n \n `say parancs📑` \n \n `banXkick parancs🚨` \n \n`botping parancs📡` \n \n`clear parancs🧹` \n \n`invite parancs💻` \n \n`help parancs` \n \n`sziabot parancs🖐` \n \n `[ECONOMY] ingyenpénz parancs💸` \n \n `[ECONOMY] pénzegyenleg parancs💸` \n\n `[ECONOMY]pénzadd💸` \n\n `supportszerver parancs💻` \n\n `servergep parancs💻`\n\n `weather parancs🌵`")
-
-        .setDescription("**Itt látható a botban lévő összes parancs!🎄**")
-
-        .setFooter(`${botname} | ${message.createdAt} | ${bot.users.cache.size}.Tag`)
-
-        message.channel.send(DreamBotEmbed)
-    }
-
-    if(cmd === `${prefix}help`){
-        let DreamBotEmbed = new Discord.MessageEmbed()
-
-        .setColor("GREEN")
-
-        .addField(`\`https://discord.gg/etqMepaenv\``, "**SUPPORT SZERVER**")
-
-        .addField(`\`-parancsok\``, "** A DreamBot-ban lévő parancsok!**")
-
-        .addField(`\`invite\``, "** A DreamBot invite-linkje**")
-
-        .setFooter(`${botname} | ${message.createdAt}`)
-
-        message.channel.send(DreamBotEmbed)
-    }
+ 
 
     if (cmd === `${prefix}clear`) {
         if (message.member.permissions.has('KICK_MEMBERS')) {
@@ -251,20 +275,7 @@ bot.on("message", async message => {
     
     ///////////////////////BANxKICK///////////////////////
 
-    if(cmd === `${prefix}ban`) {
-        let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        let rawreason = args[2];
-        let bantime = args[1];
-        let reason = args.slice(2).join(' ')
-        if (!message.member.hasPermission("BAN_MEMBERS")) return message.reply("HIBA! **Nincs jogod ehhez a parancshoz! Szükséges jog:** `Tagok kitiltása!`")
-        if(!args[0] || !args[1] || !args[2] || isNaN(bantime)) return message.reply("HIBA! **Helyes használat: {prefix}ban <@felhasználó> [idő{(nap) max 7} <indok>**");
-        if (user.hasPermission("BAN_MEMBERS") || user.hasPermission("ADMINISTRATOR")) return message.reply("HIBA! **Magaddal egyen rangú tagot, vagy nagyobbat nem bannolhatsz ki!**");
-        if(user.ban({days: bantime, reason: reason})) {
-            message.reply("**Sikeresen kitiltottad a következő felhasználót:** (" + user.user.tag + ")")
-        } else {
-            message.reply("HIBA! **Nincs jogom bannolni ezt az embert.**");
-        }
-    }
+    
 
     if(cmd === `${prefix}kick`){
         if (!message.member.hasPermission("KICK_MEMBERS")) return message.reply("HIBA! **Nincs jogod ehhez a parancshoz! Szükséges jog:** `Tagok kirúgása!`")
@@ -285,7 +296,7 @@ bot.on("message", async message => {
             } else {
             let parancsEmbed = new Discord.MessageEmbed()
             .setTitle("Parancs használata:")
-            .addField(`\`${prefix}kick <@név> [indok]\``, "DreamBot")
+            .addField(`\`${prefix}kick <@név> [indok]\``, "Cr Bot")
             .setColor("GREEN")
             .setDescription("HIBA: Kérlek adj meg egy indokot!!")
 
@@ -295,7 +306,7 @@ bot.on("message", async message => {
         } else {
             let parancsEmbed = new Discord.MessageEmbed()
             .setTitle("Parancs használata:")
-            .addField(`\`${prefix}kick <@név> [indok]\``, "DreamBot")
+            .addField(`\`${prefix}kick <@név> [indok]\``, "Cr Bot")
             .setColor("GREEN")
             .setDescription("HIBA: Kérlek említs meg egy embert!")
 
@@ -305,5 +316,4 @@ bot.on("message", async message => {
     }
 
 })
-
-bot.login(tokenfile.token);
+bot.login(process.env.TOKEN)
