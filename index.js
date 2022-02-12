@@ -10,8 +10,8 @@ bot.on("ready", async() => {
 
     let státuszok = [
         `${bot.guilds.cache.size}  szerver`,
-        "Prefix: cr.",
-        "Clash Royal",
+        "Prefix: ?.",
+        "Youtube",
         "Fejlesztő: Ádám"
     ]
 
@@ -37,75 +37,34 @@ bot.on("message", async message => {
 }
  
   
+bot.on("message", async (message) => {
+    let prefix = "?"
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const command = args.shift().toLowerCase();
 
-module.exports = {
-    name: 'play',
-    aliases: ['p'],
-    utilisation: '{prefix}play [zene neve/linkje]',
-    voiceChannel: true,
+    if(command === "play"){
+        if(!message.member.voice.channel) return message.reply("Te nem vagy bent egy voice csatornában sem!")
+        if(message.guild.me.voice.channel && message.member.voice.channel.id !==  message.guild.me.voice.channel.id) return message.reply("Te nem vagy velem egy voice csatornában!")
+        if(!args[0]) return message.reply("Kérlek adj meg egy URL-t vagy egy zene címét!")
 
-    async execute(client, message, args) {
-        if (!args[0]) return message.channel.send(`Mérlek adj meg egy érvényes keresést ${message.author}... Próbáld újra❌`);
+        bot.player.play(message, args.join(" "), {firstResult: true});
+    }
+    if(command === "queue"){
+        if(!message.member.voice.channel) return message.reply("Te nem vagy bent egy voice csatornában sem!")
+        if(message.guild.me.voice.channel && message.member.voice.channel.id !==  message.guild.me.voice.channel.id) return message.reply("Te nem vagy velem egy voice csatornában!")
 
-        const res = await player.search(args.join(' '), {
-            requestedBy: message.member,
-            searchEngine: QueryType.AUTO
-        });
+        const queue = bot.player.getQueue(message);
 
-        if (!res || !res.tracks.length) return message.channel.send(`Nincs találat ${message.author}... Próbáld újra❌`);
+        if(!bot.player.getQueue(message)) return message.reply("A várólistán nem szerepel semmi!")
 
-        const queue = await player.createQueue(message.guild, {
-            metadata: message.channel
-        });
+        message.channel.send(`**Várólista - ${message.guild.name}\nJelenleg ${queue.playing.title} | ${queue.playing.author}\n\n` + (queue.tracks.map((track, i) => {
+            return `**#${i + 1}** - ${track.title} | ${track.author} (A zenét kérte: ${track.requestedBy.username})`
 
-        try {
-            if (!queue.connection) await queue.connect(message.member.voice.channel);
-        } catch {
-            await player.deleteQueue(message.guild.id);
-            return message.channel.send(`Nem vagy hangcsatornában ${message.author}...  ❌`);
-        }
+        }).slice(0, 5).join('\n') + `\n\n${queue.tracks.length > 5 ? `és még **${queue.tracks.length - 5}db zene...` : `A lejátszási listában: **${queue.tracks.length}db zene van.`}`
+         ));
+    }
 
-        await message.channel.send(`Loading your ${res.playlist ? 'playlist' : 'track'}... 🎧`);
-
-        res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]);
-
-        if (!queue.playing) await queue.play();
-    },
-};  
-
-module.exports = {
-    name: 'pause',
-    aliases: [],
-    utilisation: '{prefix}pause',
-    voiceChannel: true,
-
-    execute(client, message) {
-        const queue = player.getQueue(message.guild.id);
-
-        if (!queue) return message.channel.send(`Nincs zend${message.author}...❌`);
-
-        const success = queue.setPaused(true);
-
-        return message.channel.send(success ? `Jelenlegi zene megállítva ${queue.current.title}  ✅` : `Hiba történt ${message.author}... Kérlek próbáld újra ❌`);
-    },
-};
-
-module.exports = {
-    name: 'skip',
-    aliases: ['sk'],
-    utilisation: '{prefix}skip',
-    voiceChannel: true,
-
-    execute(client, message) {
-        const queue = player.getQueue(message.guild.id);
-
-        if (!queue || !queue.playing) return message.channel.send(`Nincs zene ❌`);
-
-        const success = queue.skip();
-
-        return message.channel.send(success ? `Zene: ${queue.current.title} átugorva ✅`);
-    },
-};
+})
     
 })
 bot.login(process.env.TOKEN)
