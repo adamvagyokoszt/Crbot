@@ -38,9 +38,11 @@ bot.on("message", async message => {
     message.channel.send("Parancsok : Hamarosan..., Készítő: Ádám#9999 , A bot hostingja: https://dashboard.heroku.com/apps , ");
 }
  
-  
+
+})
+
 bot.on("message", async (message) => {
-    let prefix = "?"
+    let prefix = "!"
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
@@ -67,6 +69,5 @@ bot.on("message", async (message) => {
     }
 
 })
-    
-})
+
 bot.login(process.env.TOKEN)
