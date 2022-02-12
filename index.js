@@ -3,7 +3,9 @@ const botconfig = require("./botconfig.json");
 const bot = new Discord.Client({disableEveryone: true});
 const { QueryType } = require('discord-player');
 var pathToFfmpeg = require('ffmpeg-static');
-let botname = "CrBot"
+const player = new Player(bot);
+bot.player = player;
+let botname = "Redstone Music Bot"
 
 bot.on("ready", async() => {
     console.log(`${bot.user.username} sikeresn elindult!`)
